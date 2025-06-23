@@ -25,10 +25,10 @@ public List<Product> getProduct() {
 }
 
 
-public Product getProductById(int id) {
+public Optional<Product> getProductById(int id) {
    Optional<Product> product = productRepository.findById(id);
    if (product.isPresent()) {
-       return product.get();
+       return Optional.of(product.get());
    }throw new ResponseStatusException(HttpStatus.NOT_FOUND,"product "+id+" not found");
 }
 

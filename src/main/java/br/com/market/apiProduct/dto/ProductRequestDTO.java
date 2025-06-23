@@ -1,24 +1,16 @@
-package br.com.market.apiProduct.model;
+package br.com.market.apiProduct.dto;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+public class ProductRequestDTO {
 
-@Entity(name = "product")
-public class Product {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String name;
     private double price;
     private int quantity;
 
-    public Product() {
-    }
+    public ProductRequestDTO() {}
 
-    public Product(String name, double price, int quantity) {
+    public ProductRequestDTO(int id, String name, double price, int quantity) {
+        this.id = id;
         this.name = name;
         this.price = price;
         this.quantity = quantity;
@@ -28,6 +20,9 @@ public class Product {
         return id;
     }
 
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getName() {
         return name;

@@ -1,11 +1,18 @@
 package br.com.market.apiProduct.controller;
 
+import br.com.market.apiProduct.dto.ProductMapper;
+import br.com.market.apiProduct.dto.ProductRequestDTO;
+import br.com.market.apiProduct.dto.ProductResponseDTO;
 import br.com.market.apiProduct.model.Product;
 import br.com.market.apiProduct.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 
 @RestController
@@ -17,25 +24,32 @@ public class ProductController {
     private ProductService productService;
 
     @PostMapping
-    public ResponseEntity productPost(@RequestBody Product product) {
+    public ResponseEntity productPost(@RequestBody ProductRequestDTO productRequest) {
+        Product product = ProductMapper.toProduct(productRequest);
         productService.postProduct(product);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+        ProductResponseDTO productResponse = ProductMapper.toResponse(product);
+        return ResponseEntity.status(HttpStatus.CREATED).body(productResponse);
     }
 
     @GetMapping
-    public ResponseEntity productGet() {
-        return ResponseEntity.ok(productService.getProduct());
+    public  ResponseEntity<List<ProductResponseDTO>> productGet() {
+
+        List<ProductResponseDTO> productResponseDTOList = productService.getProduct().stream().map(ProductMapper::toResponse).collect(Collectors.toList());
+        return ResponseEntity.ok().body(productResponseDTOList);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity productGetById(@PathVariable int id) {
-        return ResponseEntity.ok(productService.getProductById(id));
+        ResponseEntity<ProductResponseDTO> responseDTO = productService.getProductById(id).map(ProductMapper::toResponse).map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
+        return ResponseEntity.ok().body(responseDTO);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity productPut(@PathVariable int id, @RequestBody Product product) {
+    public ResponseEntity productPut(@PathVariable int id, @RequestBody ProductRequestDTO productRequest) {
+        Product product = ProductMapper.toProduct(productRequest);
         productService.updateProduct(id, product);
-        return ResponseEntity.ok(product);
+        ProductResponseDTO productResponse = ProductMapper.toResponse(product);
+        return ResponseEntity.ok(productResponse);
     }
 
     @DeleteMapping("/{id}")
