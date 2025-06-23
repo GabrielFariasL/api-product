@@ -13,11 +13,11 @@ public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    @Size(min = 3, max = 50)
+    @Size(min = 3, max = 50, message = "invalid name")
     private String name;
-    @Min(0)
+    @Min(value = 0, message = "invalid value")
     private double price;
-    @Min(0)
+    @Min(value = 0, message = "invalid quantity")
     private int quantity;
 
     public Product() {
