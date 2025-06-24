@@ -4,7 +4,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.PositiveOrZero;
 import jakarta.validation.constraints.Size;
 
 @Entity(name = "product")
@@ -15,13 +16,12 @@ public class Product {
     private int id;
     @Size(min = 3, max = 50, message = "invalid name")
     private String name;
-    @Min(value = 0, message = "invalid value")
+    @Positive(message = "invalid price")
     private double price;
-    @Min(value = 0, message = "invalid quantity")
+    @PositiveOrZero(message = "invalid quantity")
     private int quantity;
 
-    public Product() {
-    }
+    public Product() {}
 
     public Product(String name, double price, int quantity) {
         this.name = name;
